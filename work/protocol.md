@@ -1,0 +1,23 @@
+# Decision Protocol
+
+Log of our team decisions, one row per decision. We add rows after each step.
+Labels: **fact** (frozen case fact), **synthetic** (invented for the exercise and kept stable), **assumption**, **unknown**.
+
+| Date | Step | Decision | Why | Rejected alternative |
+|---|---|---|---|---|
+| 2026-11-17 | Setup | Case: HR-onboarding assistant × privacy/permission failure | Team choice | – |
+| 2026-11-17 | Setup | Main deliverable: 3 minimal slides; templates as supporting work | Presentation is what we deliver | Full-depth templates first (too slow for 1–2 h) |
+| 2026-11-17 | S1 | Primary user: new hire (first ~30 days) | The new hire is the one exposed to data they shouldn't see | HR admin, hiring manager |
+| 2026-11-17 | S1 | Scope: answer policy questions + show own onboarding tasks; read-only | Personal data flows through the system, so a leak is plausible; no actions keeps the focus on privacy | Answer only (no personal data in flow); answer + act (adds an unsafe-action angle) |
+| 2026-11-17 | S1 | Owner: HR product owner (People-Tech); affected: new hires, exposed employees, HR, DPO | One clear business owner for policy and data decisions | Head of HR (split ownership), IT only (no business owner) |
+| 2026-11-17 | S1 | Never do: return anything unauthorized under HR access rules (with concrete examples as test anchors) | Covers all leak types | Narrow salary/contract-only rule (covers too little) |
+| 2026-11-17 | S2 | Case: "salary band" question → answer exposes colleague Jordan M.'s pay, citing HR-only doc (synthetic) | Highly sensitive, concrete, testable | Other new hire's tasks (state/scoping); buddy's private details (directory over-fetch) |
+| 2026-11-17 | S2 | Known recent change: prompt + model update on 2026-11-05 | Team choice; a realistic lead that must not be treated as the cause | New HR doc batch; retrieval index migration; no known change |
+| 2026-11-17 | S2 | Detection: new hire reported it with a screenshot; wider exposure unknown | Realistic; we invent no logs | DPO audit (implies logs exist); Slack post |
+| 2026-11-17 | S2 | Containment: remove compensation docs from knowledge base, keep policy Q&A running, notify DPO same day | Fast, reversible, keeps the service usable; GDPR 72 h clock | Pause whole assistant (bigger workflow impact); policy-only mode (config may not exist) |
+| 2026-11-17 | S2 | Challenges go to work/challenges.md and are reviewed together in S9 | Keeps momentum; nothing gets lost | Resolve each challenge immediately |
+| 2026-11-17 | S3 | Assumption: permissions enforced by a role filter at retrieval | Team choice; common design | Mark as unknown; prompt instruction only |
+| 2026-11-17 | S3 | Assumption: separate public-policy and HR-only indexes | Team choice; makes "how did the doc cross over?" the key question | One shared index; unknown |
+| 2026-11-17 | S3 | Assumption: per-session chat history only, no long-term memory | Keeps the map simple; cross-user leak stays testable | Persistent profile; unknown |
+| 2026-11-17 | S3 | Assumption: basic request logs exist; whether passages/filter decisions are logged is unknown | Makes trace data our key evidence request without inventing it | Full traces; no logs |
+| 2026-11-17 | Stop | Session 1 ends after S3; HANDOVER.md created for the next session | Chat is temporary; another teammate may continue | – |

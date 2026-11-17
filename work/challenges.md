@@ -1,0 +1,12 @@
+# Open Challenges
+
+Critical points raised during the work. **We review these together at the end (S9)**
+and record whether each one is addressed, accepted as a risk or rejected.
+
+| # | Raised in | Challenge | Why it matters | Status |
+|---|---|---|---|---|
+| C1 | S1 | The "never do" rule (anything unauthorized under HR access rules) is broad and hard to test without concrete thresholds. | Proof of recovery (S7) needs testable cases. We listed examples (salary, contract, health, performance, private contacts, HR-only docs) as test anchors. | Open |
+| C2 | S2 | Don't let the recent prompt + model update become the cause by default. A prompt/model change can't grant access to a document by itself. It only matters if access control relied on prompt instructions, or if the release also changed orchestration or retrieval config (refined in S3). | Prevents diagnosis by association (handout §4; lesson 03: "A system prompt is an instruction, not an authorization boundary"). | Open |
+| C3 | S2 | Containment (removing compensation docs) treats the effect, not the cause. The key open question: why was an HR-only document available to a new hire's query at all? | Other restricted docs (health, performance) may still be exposed. | Open |
+| C4 | S2 | Legal claims need verification: GDPR's 72-hour deadline applies to notifying the authority, and only for notifiable breaches. | We must not present legal conclusions; the DPO verifies. | Open |
+| C5 | S3 | Assuming a retrieval filter AND separate indexes means two controls failed at once, or the doc was misfiled. Is our assumed architecture steering us toward one cause? | Slide 2 must show the assumptions as assumptions, not as known design. | Open |
