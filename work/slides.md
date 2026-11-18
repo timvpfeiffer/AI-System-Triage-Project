@@ -1,7 +1,7 @@
 # When an HR Assistant Shares Too Much
 
 *A case study for AI Product Managers · 10 minutes · all names, numbers and documents are invented*
-*HTML version: [presentation.html](presentation.html) (← → navigate · F full screen · N speaker notes + timer)*
+*Early text draft. The final deck is [presentation_final.pptx](presentation_final.pptx) / [presentation_final.html](presentation_final.html).*
 
 ---
 

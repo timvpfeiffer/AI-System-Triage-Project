@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>HR Assistant Privacy Case v3</title>
+<title>HR Chatbot Privacy Case</title>
 <style>
   :root {
     --bg: #0d0e11;
@@ -182,6 +182,14 @@
   .hyps.v3 .plain { font-size: 22px; }
   .closing { margin-top: 30px; font-size: 24px; color: var(--muted); }
   .closing strong { color: var(--text); }
+  /* final additions */
+  .flowcap { align-items: baseline; }
+  .flowcap .approach { color: var(--accent); font-weight: 700; font-size: 30px; margin-right: 4px; }
+  .hyp .tag { width: auto; padding: 0 14px; font-size: 20px; align-self: flex-start; }
+  .hyps.v3 .hyp { display: flex; flex-direction: column; }
+  .hyps.v3 .hyp .log { margin-top: auto; }
+  .hyps.v3 .hyp .plain { margin-bottom: 16px; }
+  .notes-src, #notes .text { white-space: pre-line; }
 
   @media (prefers-reduced-motion: reduce) { .slide.active { animation: none; } }
 </style>
@@ -214,20 +222,20 @@
 <section class="slide intro" data-min="1">
   <div>
     <div class="kicker"><span>Case study</span><span class="num">·</span><span class="num">AI system triage</span></div>
-    <h1 style="margin-top:28px">Three AI PMs, one HR assistant<br><span class="accent">that shared too much</span></h1>
+    <h1 style="margin-top:28px">One HR Onboarding Chatbot<br><span class="accent">that shared too much</span></h1>
     <p class="lede">How we analysed a privacy failure in an AI product, and what we recommend.</p>
   </div>
   <div class="facts">
     <div class="fact"><div class="label">Our company</div><div class="value">Northwind People GmbH</div><div class="sub">Tech company in Berlin · about 1,200 employees</div></div>
-    <div class="fact"><div class="label">Our team</div><div class="value">3 AI Product Managers</div><div class="sub">We own the AI assistants used by HR and employees</div></div>
-    <div class="fact"><div class="label">The case</div><div class="value">Onboarding assistant</div><div class="sub">It showed a new employee a colleague's salary</div></div>
+    <div class="fact"><div class="label">Our team</div><div class="value">4 AI Product Managers</div><div class="sub">We own the AI assistants used by HR and employees</div></div>
+    <div class="fact"><div class="label">The case</div><div class="value">HR Onboarding Chatbot</div><div class="sub">It showed a new employee a colleague's salary</div></div>
   </div>
   <div class="agenda">
     <span><b>01</b>Set the scene</span><span><b>02</b>Our thinking</span><span><b>03</b>Our recommendation</span>
     <span style="margin-left:auto;margin-right:110px;color:var(--faint)">Company, people, numbers and documents are fictional</span>
   </div>
   <div class="pagenum">1 / 4</div>
-  <div class="notes-src">Three AI Product Managers, one HR assistant that shared too much. We work at Northwind People, a fictional tech company in Berlin with about 1,200 employees. We own the AI assistants that HR and employees use every day. One of them, our onboarding assistant, showed a new employee a colleague's salary. In the next 10 minutes we walk you through three steps: what happened, how we reasoned about the cause, and what we recommend. Everything in this case is fictional: the company, the people, the numbers and the documents.</div>
+  <div class="notes-src">One HR onboarding chatbot that shared too much. We are four AI Product Managers at Northwind People, a tech company in Berlin with about 1,200 employees. Our team owns the AI assistants that HR and employees use every day. One of them is our HR onboarding chatbot. It showed a new employee a colleague&#x27;s salary. In the next ten minutes, we walk you through three steps: first, what happened; second, how we reasoned about the cause; and third, what we recommend.</div>
 </section>
 
 <!-- ================= 2 · SET THE SCENE ================= -->
@@ -242,7 +250,7 @@
       <li><svg class="icon"><use href="#i-people"/></svg><span>Helps <strong>new employees</strong></span></li>
       <li><svg class="icon"><use href="#i-book"/></svg><span>Answers <strong>HR questions</strong></span></li>
       <li><svg class="icon"><use href="#i-list"/></svg><span>Shows <strong>their own</strong> to-dos</span></li>
-      <li><svg class="icon"><use href="#i-eye"/></svg><span><strong>Read-only</strong></span></li>
+      <li><svg class="icon"><use href="#i-eye"/></svg><span><strong>Read-only with no HR internals</strong></span></li>
     </ul>
     </div>
 
@@ -250,8 +258,8 @@
     <div class="vis-label leak">What happened · 12 Nov</div>
     <div class="chat small" aria-label="Chat showing the leak">
       <div class="chat-head"><span class="dot"></span>Onboarding Assistant · 12 Nov</div>
-      <div class="who right">New employee · day 4</div>
-      <div class="bubble user">What is the salary range for my role?</div>
+      <div class="who right">Sam · day 4</div>
+      <div class="bubble user">What is the salary range for my role in Salary grade E12?</div>
       <div class="who">Assistant</div>
       <div class="bubble bot">
         The range is €52,000–64,000. For reference, <mark>Jordan M. in your team earns €61,500 plus an 8% bonus.</mark>
@@ -262,15 +270,15 @@
     </div>
   </div>
   <div class="pagenum">2 / 4</div>
-  <div class="notes-src">A new employee asked about pay and saw a colleague's salary. Normally the assistant helps new employees in their first weeks. It answers HR questions, such as holidays or salary ranges, and shows each person their own to-do list. It can only read information, never change it. On November 12, a new employee, four days into the job, asked for the salary range of their role. The assistant gave the range, and also a colleague's exact salary and bonus. It even named its source: a document only HR should see. Expected was the public salary range only. Why it matters: private pay data reached the wrong person, it may be a data protection breach, which our data protection officer is checking, and trust in HR and the assistant is at risk. What we did first: we blocked all HR-only documents, kept normal HR answers online, and secured the system logs. The screenshot from the employee is our only hard evidence. The AI model and its instructions were updated one week earlier. That is a lead, not proof. So how could this happen?</div>
+  <div class="notes-src">A new employee, Sam, asked about pay and saw a colleague&#x27;s salary. Normally, the assistant helps new employees in their first weeks. It answers typical HR questions, for example: How many vacation days do I have? When is payday? How do I report a sick day? Who is my onboarding buddy? It also shows each person their own to-do list, like signing the contract or booking the safety training. It can only read information, never change it, and it should never see HR-internal documents. On November 12, Sam, four days into the job, asked for the salary range of salary grade E12. The assistant gave the range, but also a colleague&#x27;s exact salary and bonus. You see it in red. It even named its source: a document only HR should see. Expected was the public salary range only. Why it matters: private pay data reached the wrong person. It may be a data protection breach, which our data protection officer is checking. And trust in HR and the assistant is at risk. So how could this happen?</div>
 </section>
 
 <!-- ================= 3 · OUR THINKING ================= -->
 <section class="slide" data-min="4">
   <div class="kicker"><span>02</span><span class="num">·</span><span>Our thinking</span></div>
-  <h2>Three checkpoints could have failed, and the logs will show which</h2>
+  <h2>Where the error could have occurred ?</h2>
 
-  <div class="flowcap"><span><b>1</b>Facts first</span><span><b>2</b>Follow the question</span><span><b>3</b>Test every checkpoint</span></div>
+  <div class="flowcap"><span class="approach">Our Approach:</span><span><b>1</b>Facts first</span><span><b>2</b>Follow the question</span><span><b>3</b>Test every checkpoint</span></div>
   <div class="flow v2" aria-label="Path of a question with three checkpoints A, B, C">
     <svg viewBox="0 0 1408 150" role="img">
       <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#6b707b"/></marker></defs>
@@ -292,27 +300,27 @@
   </div>
 
   <div class="hyps v3">
-    <div class="hyp"><div class="tag">A</div><div class="title">Wrong role</div><div class="plain">Seen as HR employee</div><div class="log"><svg class="icon"><use href="#i-log"/></svg><span><b>Log:</b> user's role</span></div></div>
-    <div class="hyp"><div class="tag">B</div><div class="title">Check skipped</div><div class="plain">Lock not used</div><div class="log"><svg class="icon"><use href="#i-log"/></svg><span><b>Log:</b> did the check run?</span></div></div>
-    <div class="hyp"><div class="tag">C</div><div class="title">Wrong label</div><div class="plain">Document marked “public”</div><div class="log"><svg class="icon"><use href="#i-log"/></svg><span><b>Log:</b> document's source</span></div></div>
+    <div class="hyp"><div class="tag">Hypothesis A</div><div class="title">Wrong role</div><div class="plain">Seen as HR employee</div><div class="log"><svg class="icon"><use href="#i-log"/></svg><span><b>Log:</b> user's role</span></div></div>
+    <div class="hyp"><div class="tag">Hypothesis B</div><div class="title">Check skipped</div><div class="plain">The access for HR Doc. check was skipped</div><div class="log"><svg class="icon"><use href="#i-log"/></svg><span><b>Log:</b> did the check run?</span></div></div>
+    <div class="hyp"><div class="tag">Hypothesis C</div><div class="title">Wrong label</div><div class="plain">HR internal document marked “public”</div><div class="log"><svg class="icon"><use href="#i-log"/></svg><span><b>Log:</b> document's source</span></div></div>
   </div>
   <div class="caption" style="margin-top:22px">All three equally uncertain · one log entry tells them apart</div>
 
   <div class="pagenum">3 / 4</div>
-  <div class="notes-src">Three checkpoints could have failed, and the logs will show which. We followed three steps. First, facts first: only the screenshot is certain, everything else is an assumption. Second, we followed the path of the question: from the new employee, through the assistant, to the documents, and back as an answer with the leak. Third, at every checkpoint we asked: could the check have failed here? That gives three explanations. A, wrong role: the system thought the new employee was an HR employee, so the access check worked, but with wrong information. B, check skipped: the access check was not used for HR-only documents; the lock was there but not used. C, wrong label: the salary document was marked public, so it was in the wrong drawer. All three are equally uncertain: we have only one example. Our logs record every request. One log entry shows who the system thought the user was, whether the access check ran, and where the document came from, so it tells A, B and C apart. We also search the logs for other affected users. An AI reviewed our thinking and added two ideas: a reused answer from another user, and privacy protected only by instructions to the AI. We kept both as backups. We deliberately did not blame the recent AI update without evidence. So what do we do now?</div>
+  <div class="notes-src">Where could the error have happened? Our approach had three steps. First, facts first: only the screenshot and the logs are facts, everything else is an assumption. Second, follow the question. Third, test every checkpoint. Here is the path of the question: from the new employee, through the assistant, to the documents, and back as an answer with the leak. At every checkpoint we asked: could the check have failed here? That gives us three hypotheses. Hypothesis A, wrong role: the new employee was seen as an HR employee. The log shows the user&#x27;s role. Hypothesis B, check skipped: the access check for HR documents was skipped. The log shows whether the check ran. Hypothesis C, wrong label: an HR-internal document was marked &quot;public&quot;. The log shows the document&#x27;s source. All three are equally uncertain, because we have only one example. But one log entry tells them apart. We also search the logs for other affected users. We kept two more ideas as backups, and we did not blame the recent AI update without evidence. So what do we do now?</div>
 </section>
 
 <!-- ================= 4 · RECOMMENDATION ================= -->
 <section class="slide" data-min="2.5">
   <div class="kicker"><span>03</span><span class="num">·</span><span>Our recommendation</span></div>
-  <h2>Fix the failed checkpoint, then prove it with “0 Leak Testing”</h2>
+  <h2>From Immediate Action to Future Testing</h2>
   <div class="verdict">Keep it running <em>safely</em>, find the cause in the logs, make the <em>smallest fix</em>.</div>
 
   <div class="timeline">
     <div class="tl"><div class="node"></div><div class="when">Now</div><div class="what">Block HR-only documents</div></div>
     <div class="tl"><div class="node"></div><div class="when">Within 2 days</div><div class="what">Check A, B, C in the logs</div></div>
     <div class="tl"><div class="node"></div><div class="when">Then</div><div class="what">Fix only the confirmed cause</div></div>
-    <div class="tl"><div class="node"></div><div class="when">Future</div><div class="what">Leak test before every update</div></div>
+    <div class="tl"><div class="node"></div><div class="when">Future</div><div class="what">Zero Leak test before every update</div></div>
   </div>
 
   <div class="zero">
@@ -323,10 +331,12 @@
       <div class="zero-item"><svg class="icon red"><use href="#i-undo"/></svg><span><strong>1 leak</strong> → block or pause</span></div>
     </div>
   </div>
-  <div class="closing">Our lesson: AI privacy failures are usually <strong>permission problems</strong>, not AI problems.</div>
+  <div class="closing">Our lesson: AI privacy failures are usually <strong>permission problems</strong>.</div>
 
   <div class="pagenum">4 / 4</div>
-  <div class="notes-src">Fix the failed checkpoint, then prove it with zero-leak testing. Our recommendation: keep the assistant running safely, find the real cause in the logs, then make the smallest fix. Now: HR-only documents stay blocked, and the data protection officer reviews the case. Within two days: we analyse the logs, check A, B and C, and search for other leaks. Then: we fix only what the logs confirm: the role, the access check, or the document label. For the future: a leak test before every update, and logs that record every access decision. What we will not do: switch to a smarter AI model. An AI model is not a lock; the system must enforce access rules. How we know it helped, our zero-leak testing: the original question plus 20 test questions about private data must produce zero leaks; new employees still get normal answers, like the public salary range; the logs show no HR-only document in answers to new employees, reviewed weekly for four weeks. If even one leak appears, we block HR data again or pause the assistant. The HR product owner is responsible, together with the data protection officer. Our main lesson: a privacy failure in an AI product is usually a permission or data problem, not an AI problem. Thank you.</div>
+  <div class="notes-src">From Immediate Action to Future Testing: Our recommendation: keep the assistant running safely, find the real cause in the logs, and make the smallest fix.Now: HR-only documents stay blocked, and the data protection officer reviews the case.Within two days: we analyse the logs, check A, B and C, and search for other leaks.Then: we fix only the confirmed cause: the role, the access check, or the document label.For the future: a leak test before every update, and logs that record every access decision.How do we know it helped? With zero-leak testing. The original question plus 20 test questions about private data must produce zero leaks. New employees still get normal answers, like the public salary range. And if even one leak appears, we block HR data again or pause the assistant. 
+The number 21 is our team&#x27;s judgment, not statistics. It&#x27;s large enough to cover every data category from several angles, and small enough to run before every update. A larger set would be better, but it costs more effort.
+The HR product owner is responsible, together with the data protection officer.Our lesson: privacy failures in AI products are usually permission problems.</div>
 </section>
 
 </div></div>
