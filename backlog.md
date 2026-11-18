@@ -13,8 +13,8 @@ Assignment: [06-session-handout.md](06-session-handout.md).
 | S1 | Frame the system | work/system-map.md › System Context | Slide 1 | Done |
 | S2 | Failure + frozen case facts | work/diagnostic-register.md › Incident Frame | Slide 1 | Done |
 | S3 | Architecture & trust-boundary map, evidence requests | work/system-map.md (rest) | Slides 1–2 | Done |
-| S4 | Competing hypotheses | work/diagnostic-register.md | Slide 2 | To do |
-| S5 | LLM skeptical-panel challenge | AI Challenge Note | Slide 2 | To do |
+| S4 | Competing hypotheses | work/diagnostic-register.md | Slide 2 | Done |
+| S5 | LLM skeptical-panel challenge | AI Challenge Note | Slide 2 | Done |
 | S6 | Recovery plan | work/recovery-plan.md › Decision, Actions, Options | Slide 3 | To do |
 | S7 | Proof of recovery & rollback | work/recovery-plan.md › Proof, Release | Slide 3 | To do |
 | S8 | Draft the 3 slides | work/slides.md | All | To do |
@@ -49,16 +49,16 @@ Assignment: [06-session-handout.md](06-session-handout.md).
 - [x] Uncertain components labelled as assumptions; architecture unknowns listed
 - [x] Evidence we would request (smallest useful set)
 
-## S4 · Competing hypotheses (handout §4)
+## S4 · Competing hypotheses (handout §4): Done
 **As a** team, **we want** at least 3 materially different causes, ranked **so that** we don't jump to a single explanation.
-- [ ] ≥3 distinct hypotheses, each with component, why it fits, evidence against, next test, confidence
-- [ ] Next-best evidence: the one check that best separates them
-- [ ] Current diagnosis (no root cause claimed as verified)
+- [x] ≥3 distinct hypotheses, each with component, why it fits, evidence against, next test, confidence
+- [x] Next-best evidence: the one check that best separates them
+- [x] Current diagnosis (no root cause claimed as verified)
 
-## S5 · LLM challenge (handout §5)
+## S5 · LLM challenge (handout §5): Done
 **As a** team, **we want** a skeptical AI review of our map and register **so that** we find missed causes and weak fixes.
-- [ ] The AI acts as the skeptical panel, including critique of its own earlier suggestions
-- [ ] Most important points logged as accepted / edited / rejected in the AI Challenge Note
+- [x] The AI acts as the skeptical panel, including critique of its own earlier suggestions
+- [x] Most important points logged as accepted / edited / rejected in the AI Challenge Note
 
 ## S6 · Recovery plan (handout §6)
 **As a** team, **we want** a prioritized recovery plan **so that** our response follows from the evidence.

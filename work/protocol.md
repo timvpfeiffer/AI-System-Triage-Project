@@ -21,3 +21,11 @@ Labels: **fact** (frozen case fact), **synthetic** (invented for the exercise an
 | 2026-11-17 | S3 | Assumption: per-session chat history only, no long-term memory | Keeps the map simple; cross-user leak stays testable | Persistent profile; unknown |
 | 2026-11-17 | S3 | Assumption: basic request logs exist; whether passages/filter decisions are logged is unknown | Makes trace data our key evidence request without inventing it | Full traces; no logs |
 | 2026-11-17 | Stop | Session 1 ends after S3; HANDOVER.md created for the next session | Chat is temporary; another teammate may continue | – |
+| 2026-11-18 | S4 | Hypotheses: H1 role mapping (TB1) rank 1, H2 retrieval filter not applied (TB3) rank 2, H3 ingestion/labelling (TB2) rank 3 | Team judgment; three different trust boundaries | Prompt-only control (TB5), cross-user session state, sensitive logs, unsafe tool output |
+| 2026-11-18 | S4 | Next-best evidence: trace of Sam's request (role, source index, filter); fallback: SSO role + doc label/index + re-run as new-hire test account | One record separates all three hypotheses | Start with the release diff (only tests H2) |
+| 2026-11-18 | S4 | Confidence Low for all three; no verified cause | Only one synthetic screenshot as evidence | – |
+| 2026-11-18 | S5 | Accept P1: add H4 cross-user state via response cache (TB6) | Plausible, distinct, testable via the same trace | Note only; reject |
+| 2026-11-18 | S5 | Accept P2: add H5 prompt-only permission control (TB5) | Our exclusion rested on an unverified S3 assumption; best fit to the known change | Merge into H2; reject |
+| 2026-11-18 | S5 | Accept P3: fix the AI's overstated H2 wording | Source index is unknown | – |
+| 2026-11-18 | S5 | Reject P4: keep the original containment (remove compensation docs, notify DPO) | Team decision | Disconnect HR-only index + clear cache + check role; pause assistant |
+| 2026-11-18 | S5 | Reject P5: don't add a team/profile data path to the map | Team decision | Add as architecture unknown |

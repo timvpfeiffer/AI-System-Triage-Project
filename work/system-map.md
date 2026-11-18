@@ -41,6 +41,7 @@ flowchart LR
     R -->|TB5 retrieved text| M[LLM<br/>updated 2026-11-05<br/>K]
     O --> M
     M --> V[Output checks / citations<br/>U]
+    O -. TB6 .-> C[(Answer cache?<br/>U, added S5)]
     V --> UI
     O --> L[(Request logs<br/>A, contents U)]
     D[HR documents<br/>owner: HR] -->|TB2 ingestion + access labels| P
@@ -71,6 +72,7 @@ flowchart LR
 | LLM | Generate answer with citations | Prompt + passages | Answer text | External provider (**A**) | K: updated 2026-11-05 |
 | Output checks | Validate citations / block sensitive data | Draft answer | Final answer | People-Tech | U: may not exist |
 | Logs | Record requests for audit | Request/response | Log records | People-Tech | A |
+| Answer cache | Reuse answers to repeated questions | Question text | Cached answer | People-Tech | U: existence unknown (added S5, H4) |
 
 ## Trust Boundaries and Permissions
 
@@ -80,6 +82,7 @@ flowchart LR
 | TB2 HR docs → indexes | Private documents and their access labels | Correct audience label + routing to the right index | HR-only doc lands in the public index or is mislabelled |
 | TB3 Orchestrator → retrieval | Query + user role | Filter by permissions **before** retrieval (lesson 03) | Restricted passages reach the model |
 | TB4 Orchestrator → task system | User ID | Query scoped to own ID | Another person's tasks shown |
+| TB6 Answer cache → user (if a cache exists) | Answers generated for other users | Cache keyed per user/role, or no caching of personal answers | Another user's answer shown (H4) |
 | TB5 Retrieved text → LLM context | Passages, possibly sensitive | Only authorized text enters; the prompt is **not** an authorization boundary (lesson 03) | Model repeats restricted data, as in our case |
 
 ## Human Oversight and Recovery
