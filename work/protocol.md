@@ -29,3 +29,8 @@ Labels: **fact** (frozen case fact), **synthetic** (invented for the exercise an
 | 2026-11-18 | S5 | Accept P3: fix the AI's overstated H2 wording | Source index is unknown | – |
 | 2026-11-18 | S5 | Reject P4: keep the original containment (remove compensation docs, notify DPO) | Team decision | Disconnect HR-only index + clear cache + check role; pause assistant |
 | 2026-11-18 | S5 | Reject P5: don't add a team/profile data path to the map | Team decision | Add as architecture unknown |
+| 2026-11-18 | S4/S5 | Keep 3 main hypotheses: H1, H2, H3; H4 + H5 listed as "also considered" | Focus for Slide 2 and the time limit | H1, H2, H5; H2, H3, H5 |
+| 2026-11-18 | S6 | Decision: keep the assistant running; remove its access to all HR-only documents | Stops the leak path for H1–H3 while keeping policy Q&A available | Contain + investigate with doc removal only; roll back release; pause assistant |
+| 2026-11-18 | S7 | Proof: zero-leak test set (Sam's case + 20 restricted-data probes), 0 leaks, public band still answered | Measurable, repeatable | Original case only; + 2-week canary |
+| 2026-11-18 | S6 | Actions: 1 cut HR-only docs + DPO, 2 trace + 3 checks (48 h), 3 fix confirmed boundary only, 4 zero-leak tests per release + per-request logging | Non-ML, smallest, reversible; matches Low confidence | Clear cache; re-run test only; stronger model; HR upload review only |
+| 2026-11-18 | S8–S9 | Slides drafted in work/slides.md; final check done; challenge statuses proposed for team confirmation | 30-minute time limit | – |

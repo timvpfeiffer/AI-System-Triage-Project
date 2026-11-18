@@ -1,6 +1,6 @@
 # Handover: 06 Assignment (HR-Onboarding Assistant × Privacy Failure)
 
-**Last updated:** 2026-11-18, session 2 (after S5). **Status:** S0–S5 done; **next is S6 (recovery plan).**
+**Last updated:** 2026-11-18, session 2. **Status:** S0–S9 done; **only team review left (see section 6).**
 
 ## 1. How to Use This File
 
@@ -98,10 +98,10 @@ no optional extensions. Keep us moving and tell us if a step runs long.
 | S3 | Architecture & trust-boundary map | Done | [work/system-map.md](work/system-map.md) (all other sections) |
 | S4 | Competing hypotheses | Done | work/diagnostic-register.md › Competing Hypotheses, Next-Best Evidence, Current Diagnosis |
 | S5 | LLM skeptical-panel challenge | Done | AI Challenge Note |
-| **S6** | **Recovery plan** | **Next** | [work/recovery-plan.md](work/recovery-plan.md) |
-| S7 | Proof of recovery | To do | work/recovery-plan.md |
-| S8 | 3 slides | To do | work/slides.md (not created yet) |
-| S9 | Final check + review challenges | To do | [work/challenges.md](work/challenges.md) |
+| S6 | Recovery plan | Done | [work/recovery-plan.md](work/recovery-plan.md) |
+| S7 | Proof of recovery | Done | work/recovery-plan.md |
+| S8 | 3 slides | Done | [work/slides.md](work/slides.md) |
+| S9 | Final check + review challenges | Done | [work/challenges.md](work/challenges.md) |
 
 Detailed acceptance criteria: [backlog.md](backlog.md). All decisions and rejected options: [work/protocol.md](work/protocol.md).
 
@@ -128,25 +128,17 @@ All details are **synthetic** and frozen. Don't change them.
 - Cite lessons 01–05 by file name. Correct your own earlier claims openly (e.g. the GDPR 72-hour wording in C4).
 - Don't commit unless the team asks.
 
-## 6. Next Action: S6 Recovery Plan (feeds Slide 3)
+## 6. Next Action: Team Review Before Presenting
 
-Diagnosis so far ([work/diagnostic-register.md](work/diagnostic-register.md)):
-H1 role mapping (TB1, rank 1), H2 retrieval filter (TB3, rank 2), H3
-ingestion/labelling (TB2, rank 3), plus H4 response cache (TB6) and H5
-prompt-only control (TB5), added in the S5 panel review. All Low confidence.
-Next-best evidence: the trace of Sam's request. In S5 the team rejected wider
-containment (P4 → challenge C7) and the "in your team" data path (P5).
+All steps are done. The main deliverable is [work/slides.md](work/slides.md).
+Open items for the team:
 
-1. Help the team choose 3–5 actions across contain / investigate / correct /
-   prevent; score them on impact, effort, risk reduction, confidence,
-   reversibility, with owners. Non-ML options first.
-2. Fill in Decision, Actions and Options Considered in
-   [work/recovery-plan.md](work/recovery-plan.md). With only Low-confidence
-   hypotheses, the honest recommendation is likely "Contain + Investigate".
-3. Then S7 (proof of recovery) in the same file.
-
-**Time left:** about 35 minutes for S6–S9. Suggested: S6–S7 15 min · S8–S9 20.
+1. Read the 3 slides aloud once (target: about 1 minute per slide) and cut anything you don't need.
+2. Confirm or change the **proposed** statuses in [work/challenges.md](work/challenges.md).
+3. Replace "Team decision" with a real one-sentence reason for P4/P5 in the
+   AI Challenge Note ([work/diagnostic-register.md](work/diagnostic-register.md)).
+4. Optional: answer the handout's reflection questions.
 
 ## 7. Git Note
 
-At handover, **nothing was committed**. Commit and push the new files (HANDOVER.md, backlog.md, README.md, work/) so teammates on other machines can continue.
+All work is committed and pushed to `main`.

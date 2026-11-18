@@ -15,10 +15,10 @@ Assignment: [06-session-handout.md](06-session-handout.md).
 | S3 | Architecture & trust-boundary map, evidence requests | work/system-map.md (rest) | Slides 1–2 | Done |
 | S4 | Competing hypotheses | work/diagnostic-register.md | Slide 2 | Done |
 | S5 | LLM skeptical-panel challenge | AI Challenge Note | Slide 2 | Done |
-| S6 | Recovery plan | work/recovery-plan.md › Decision, Actions, Options | Slide 3 | To do |
-| S7 | Proof of recovery & rollback | work/recovery-plan.md › Proof, Release | Slide 3 | To do |
-| S8 | Draft the 3 slides | work/slides.md | All | To do |
-| S9 | Final check | Review Criteria + Submission Check | All | To do |
+| S6 | Recovery plan | work/recovery-plan.md › Decision, Actions, Options | Slide 3 | Done |
+| S7 | Proof of recovery & rollback | work/recovery-plan.md › Proof, Release | Slide 3 | Done |
+| S8 | Draft the 3 slides | work/slides.md | All | Done |
+| S9 | Final check | Review Criteria + Submission Check | All | Done |
 
 ---
 
@@ -60,29 +60,29 @@ Assignment: [06-session-handout.md](06-session-handout.md).
 - [x] The AI acts as the skeptical panel, including critique of its own earlier suggestions
 - [x] Most important points logged as accepted / edited / rejected in the AI Challenge Note
 
-## S6 · Recovery plan (handout §6)
+## S6 · Recovery plan (handout §6): Done
 **As a** team, **we want** a prioritized recovery plan **so that** our response follows from the evidence.
-- [ ] 3–5 actions across contain / investigate / correct / prevent
-- [ ] Each scored on impact, effort, risk reduction, confidence, reversibility, with an owner
-- [ ] Non-ML options (permissions, workflow, review) considered first
-- [ ] Decision + evidence that would change it
+- [x] 3–5 actions across contain / investigate / correct / prevent
+- [x] Each scored on impact, effort, risk reduction, confidence, reversibility, with an owner
+- [x] Non-ML options (permissions, workflow, review) considered first
+- [x] Decision + evidence that would change it
 
-## S7 · Proof of recovery (handout §7)
+## S7 · Proof of recovery (handout §7): Done
 **As a** team, **we want** measurable recovery criteria **so that** we know when the incident can be closed.
-- [ ] Original failure turned into a fixed regression test
-- [ ] Guardrail thresholds, monitoring owner, rollback/shutdown trigger
-- [ ] Remaining risk and who is authorized to accept it
+- [x] Original failure turned into a fixed regression test
+- [x] Guardrail thresholds, monitoring owner, rollback/shutdown trigger
+- [x] Remaining risk and who is authorized to accept it
 
-## S8 · 3-slide presentation (handout §8)
+## S8 · 3-slide presentation (handout §8): Done
 **As a** team, **we want** 3 minimal slides with speaker notes **so that** we can present our decision clearly.
-- [ ] Slide 1: what the system does, what went wrong, impact, containment
-- [ ] Slide 2: ≥3 ranked explanations + the check that narrows them down
-- [ ] Slide 3: next steps, how we'd know it helped, owner, rollback, what would change our mind
-- [ ] Cut until every bullet is essential
+- [x] Slide 1: what the system does, what went wrong, impact, containment
+- [x] Slide 2: ≥3 ranked explanations + the check that narrows them down
+- [x] Slide 3: next steps, how we'd know it helped, owner, rollback, what would change our mind
+- [x] Cut until every bullet is essential
 
-## S9 · Final check
+## S9 · Final check: Done
 **As a** team, **we want** to verify consistency **so that** all deliverables tell one story.
-- [ ] Slides answer their three questions
-- [ ] Slides match the templates; facts / synthetic / assumptions / unknowns are visibly distinct
-- [ ] Handout Review Criteria and Submission Check passed
-- [ ] Every item in work/challenges.md marked addressed / accepted risk / rejected
+- [x] Slides answer their three questions
+- [x] Slides match the templates; facts / synthetic / assumptions / unknowns are visibly distinct
+- [x] Handout Review Criteria and Submission Check passed
+- [x] Every item in work/challenges.md marked addressed / accepted risk / rejected
