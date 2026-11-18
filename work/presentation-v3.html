@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HR Assistant Privacy Case v3</title>
+<style>
+  :root {
+    --bg: #0d0e11;
+    --surface: #17191e;
+    --surface-2: #1f2229;
+    --line: #2c3038;
+    --text: #f3f3ef;
+    --muted: #9a9ea8;
+    --faint: #6b707b;
+    --accent: #c8f560;
+    --accent-ink: #11140a;
+    --leak: #ff5c5c;
+    --leak-bg: rgba(255, 92, 92, 0.14);
+    --font-head: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    --font-body: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--font-body); overflow: hidden; }
+
+  /* ---------- Stage: fixed 1600×900, scaled to fit ---------- */
+  #viewport { position: fixed; inset: 0; display: grid; place-items: center; }
+  #stage { width: 1600px; height: 900px; position: relative; transform-origin: center center; }
+  .slide {
+    position: absolute; inset: 0; padding: 72px 96px 80px;
+    display: none; flex-direction: column;
+    background: var(--bg);
+  }
+  .slide.active { display: flex; animation: fade .35s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  /* ---------- Type ---------- */
+  .kicker { font-family: var(--font-head); font-size: 20px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); display: flex; gap: 16px; align-items: center; }
+  .kicker .num { color: var(--faint); }
+  h1 { font-family: var(--font-head); font-weight: 700; font-size: 84px; line-height: 1.02; letter-spacing: -0.02em; }
+  h2 { font-family: var(--font-head); font-weight: 600; font-size: 46px; line-height: 1.12; letter-spacing: -0.01em; margin-top: 18px; max-width: 1250px; }
+  h3 { font-family: var(--font-head); font-weight: 600; font-size: 21px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
+  p, li { font-size: 25px; line-height: 1.4; }
+  .muted { color: var(--muted); }
+  .accent { color: var(--accent); }
+  .leak { color: var(--leak); }
+  strong { font-weight: 600; }
+  ul.clean { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+  ul.clean li { display: flex; gap: 16px; align-items: flex-start; }
+  .icon { width: 30px; height: 30px; flex: none; stroke: var(--accent); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; margin-top: 2px; }
+  .icon.red { stroke: var(--leak); }
+  .icon.grey { stroke: var(--muted); }
+
+  .footer { position: absolute; left: 96px; right: 96px; bottom: 32px; display: flex; justify-content: space-between; font-size: 16px; color: var(--faint); letter-spacing: .04em; }
+
+  /* ---------- Intro slide ---------- */
+  .intro { justify-content: space-between; }
+  .intro .lede { font-size: 30px; color: var(--muted); max-width: 1100px; margin-top: 28px; line-height: 1.4; }
+  .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .fact { border-top: 2px solid var(--line); padding-top: 22px; }
+  .fact .label { font-size: 17px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); margin-bottom: 10px; }
+  .fact .value { font-family: var(--font-head); font-size: 30px; font-weight: 600; line-height: 1.2; }
+  .fact .sub { font-size: 20px; color: var(--muted); margin-top: 8px; line-height: 1.4; }
+  .agenda { display: flex; gap: 40px; font-size: 22px; color: var(--muted); }
+  .agenda span b { color: var(--accent); font-family: var(--font-head); margin-right: 8px; }
+
+  /* ---------- Slide 1 ---------- */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1.15fr; gap: 64px; margin-top: 30px; flex: 1; }
+  .chat { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 30px; display: flex; flex-direction: column; gap: 18px; align-self: start; }
+  .chat-head { display: flex; align-items: center; gap: 12px; font-size: 18px; color: var(--muted); padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+  .bubble { padding: 18px 22px; border-radius: 18px; font-size: 23px; line-height: 1.45; max-width: 88%; }
+  .bubble.user { align-self: flex-end; background: var(--accent); color: var(--accent-ink); border-bottom-right-radius: 6px; font-weight: 500; }
+  .bubble.bot { align-self: flex-start; background: var(--surface-2); border-bottom-left-radius: 6px; }
+  .bubble mark { background: var(--leak-bg); color: var(--leak); padding: 2px 6px; border-radius: 6px; font-weight: 600; box-shadow: inset 0 -2px 0 var(--leak); }
+  .source { display: inline-flex; align-items: center; gap: 10px; margin-top: 12px; font-size: 18px; color: var(--leak); border: 1px solid var(--leak); border-radius: 999px; padding: 6px 14px; }
+  .source .icon { width: 20px; height: 20px; margin: 0; }
+  .who { font-size: 16px; color: var(--faint); letter-spacing: .06em; }
+  .who.right { align-self: flex-end; }
+  .stack { display: flex; flex-direction: column; gap: 26px; }
+  .stack > div > ul.clean { gap: 10px; }
+  .stack > div > ul.clean li { font-size: 23px; }
+  .pill-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 24px 26px; }
+  .card p, .card li { font-size: 22px; }
+  .pill-row .card { padding: 18px 22px; }
+  .pill-row .card li { font-size: 19px; line-height: 1.35; }
+  .card h3 { margin-bottom: 12px; font-size: 18px; }
+  .card.red { border-color: rgba(255, 92, 92, .45); }
+  .card.red h3 { color: var(--leak); }
+  .card.green h3 { color: var(--accent); }
+  .card ul.clean { gap: 8px; }
+
+  /* ---------- Slide 2 ---------- */
+  .steps { display: flex; gap: 14px; margin-top: 22px; }
+  .step { display: flex; align-items: center; gap: 12px; font-size: 20px; color: var(--muted); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 10px 20px 10px 12px; }
+  .step b { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-2); color: var(--accent); font-family: var(--font-head); font-size: 17px; }
+  .step-arrow { align-self: center; color: var(--faint); font-size: 22px; }
+  .flow { margin-top: 14px; }
+  .flow svg { width: 100%; height: auto; display: block; }
+  .hyps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 8px; }
+  .hyp { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 18px 22px; }
+  .hyp .tag { display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 10px; background: var(--accent); color: var(--accent-ink); font-family: var(--font-head); font-weight: 700; font-size: 22px; margin-bottom: 10px; }
+  .hyp .title { font-family: var(--font-head); font-size: 24px; font-weight: 600; line-height: 1.25; }
+  .hyp .plain { font-size: 20px; color: var(--muted); margin-top: 8px; line-height: 1.4; }
+  .logbar { margin-top: 16px; display: flex; gap: 22px; align-items: center; background: var(--surface); border: 1px solid var(--accent); border-radius: 18px; padding: 14px 26px; }
+  .logbar p { font-size: 22px; }
+  .logbar .big { font-family: var(--font-head); font-size: 26px; font-weight: 600; color: var(--accent); white-space: nowrap; }
+  .note-line { margin-top: 10px; font-size: 18px; color: var(--faint); }
+
+  /* ---------- Slide 3 ---------- */
+  .verdict { margin-top: 26px; font-family: var(--font-head); font-size: 32px; font-weight: 600; line-height: 1.25; max-width: 1350px; }
+  .verdict em { font-style: normal; color: var(--accent); }
+  .timeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 36px; position: relative; }
+  .timeline::before { content: ""; position: absolute; left: 12px; right: 12px; top: 11px; height: 2px; background: var(--line); }
+  .tl { padding-right: 26px; position: relative; }
+  .tl .node { width: 24px; height: 24px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); position: relative; z-index: 1; }
+  .tl:first-child .node { background: var(--accent); }
+  .tl .when { font-family: var(--font-head); font-size: 19px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-top: 18px; }
+  .tl .what { font-size: 22px; line-height: 1.4; margin-top: 8px; }
+  .bottom-2 { display: grid; grid-template-columns: 1fr 1.45fr; gap: 26px; margin-top: 36px; }
+  .not { display: flex; gap: 18px; }
+  .not .icon { width: 38px; height: 38px; }
+  .proof ul.clean { gap: 10px; }
+  .proof li { font-size: 21px; }
+
+  /* ---------- Progress + notes ---------- */
+  #progress { position: fixed; left: 0; bottom: 0; height: 3px; background: var(--accent); transition: width .3s ease; z-index: 5; }
+  #notes {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+    background: rgba(13, 14, 17, .96); border-top: 1px solid var(--line);
+    padding: 18px 28px 22px; display: none; gap: 28px; align-items: flex-start;
+    backdrop-filter: blur(6px);
+  }
+  #notes.show { display: flex; }
+  #notes .text { flex: 1; font-size: 17px; line-height: 1.55; color: var(--text); max-width: 1100px; }
+  #notes .meta { flex: none; text-align: right; font-size: 14px; color: var(--muted); line-height: 1.7; min-width: 200px; }
+  #notes .clock { font-family: var(--font-head); font-size: 26px; color: var(--accent); }
+  #notes .clock.over { color: var(--leak); }
+  #hint { position: fixed; right: 18px; top: 14px; font-size: 13px; color: var(--faint); z-index: 4; transition: opacity .6s; }
+  .notes-src { display: none; }
+
+
+  /* ---------- v2 additions ---------- */
+  .pagenum { position: absolute; right: 96px; bottom: 32px; font-family: var(--font-head); font-size: 18px; color: var(--muted); letter-spacing: .08em; }
+  .scene { display: grid; grid-template-columns: 1fr 640px; gap: 80px; margin-top: 56px; align-items: center; flex: 1; }
+  .scene ul.clean { gap: 26px; }
+  .scene ul.clean li { font-size: 32px; align-items: center; }
+  .scene .icon { width: 36px; height: 36px; margin: 0; }
+  .chat.small { padding: 22px; gap: 12px; border-radius: 18px; }
+  .chat.small .chat-head { font-size: 15px; padding-bottom: 10px; }
+  .chat.small .who { font-size: 13px; }
+  .chat.small .bubble { font-size: 18px; padding: 12px 16px; border-radius: 14px; }
+  .chat.small .source { font-size: 14px; padding: 4px 12px; margin-top: 10px; }
+  .chat.small .source .icon { width: 16px; height: 16px; }
+  .flowcap { display: flex; gap: 22px; margin-top: 44px; font-size: 20px; color: var(--muted); }
+  .flowcap b { color: var(--accent); font-family: var(--font-head); margin-right: 6px; }
+  .flow.v2 { margin-top: 22px; }
+  .hyps.v2 { margin-top: 40px; }
+  .hyps.v2 .hyp { padding: 26px 28px; }
+  .hyps.v2 .title { font-size: 32px; }
+  .hyps.v2 .plain { font-size: 22px; }
+  .uncertain { margin-top: 26px; font-size: 22px; color: var(--muted); }
+  .zero { margin-top: 44px; background: var(--surface); border: 1px solid var(--accent); border-radius: 20px; padding: 28px 34px; }
+  .zero h3 { color: var(--accent); font-size: 22px; margin-bottom: 18px; }
+  .zero-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+  .zero-item { display: flex; gap: 14px; align-items: center; font-size: 25px; }
+  .zero-item .icon { margin: 0; }
+
+  /* ---------- v3 additions: takeaway titles, visual headings, captions ---------- */
+  h2 { font-weight: 700; max-width: 1408px; }
+  .vis-label { font-size: 20px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); margin-bottom: 14px; }
+  .vis-label.leak { color: var(--leak); }
+  .caption { font-size: 22px; color: var(--muted); margin-top: 16px; }
+  .scene .caption { margin-top: 14px; }
+  .hyp .log { display: flex; align-items: center; gap: 10px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 22px; }
+  .hyp .log .icon { width: 24px; height: 24px; margin: 0; }
+  .hyp .log b { color: var(--accent); font-weight: 700; }
+  .hyps.v3 { margin-top: 34px; }
+  .hyps.v3 .hyp { padding: 24px 28px; }
+  .hyps.v3 .title { font-size: 32px; }
+  .hyps.v3 .plain { font-size: 22px; }
+  .closing { margin-top: 30px; font-size: 24px; color: var(--muted); }
+  .closing strong { color: var(--text); }
+
+  @media (prefers-reduced-motion: reduce) { .slide.active { animation: none; } }
+</style>
+</head>
+<body>
+
+<!-- Inline SVG icon set -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H4z"/><path d="M20 4h-4a2 2 0 0 0-2 2"/><path d="M20 4v14h-6"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 13h6M9 17h6"/></symbol>
+    <symbol id="i-log" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h2M11 9h6M7 13h2M11 13h6M7 17h2M11 17h4"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></symbol>
+    <symbol id="i-people" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6"/><circle cx="17" cy="9" r="2.5"/><path d="M15.5 14.2c2.9.3 5.5 2.5 5.5 5.8"/></symbol>
+    <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></symbol>
+  </defs>
+</svg>
+
+<div id="viewport"><div id="stage">
+
+<!-- ================= 1 · INTRO ================= -->
+<section class="slide intro" data-min="1">
+  <div>
+    <div class="kicker"><span>Case study</span><span class="num">·</span><span class="num">AI system triage</span></div>
+    <h1 style="margin-top:28px">Three AI PMs, one HR assistant<br><span class="accent">that shared too much</span></h1>
+    <p class="lede">How we analysed a privacy failure in an AI product, and what we recommend.</p>
+  </div>
+  <div class="facts">
+    <div class="fact"><div class="label">Our company</div><div class="value">Northwind People GmbH</div><div class="sub">Tech company in Berlin · about 1,200 employees</div></div>
+    <div class="fact"><div class="label">Our team</div><div class="value">3 AI Product Managers</div><div class="sub">We own the AI assistants used by HR and employees</div></div>
+    <div class="fact"><div class="label">The case</div><div class="value">Onboarding assistant</div><div class="sub">It showed a new employee a colleague's salary</div></div>
+  </div>
+  <div class="agenda">
+    <span><b>01</b>Set the scene</span><span><b>02</b>Our thinking</span><span><b>03</b>Our recommendation</span>
+    <span style="margin-left:auto;margin-right:110px;color:var(--faint)">Company, people, numbers and documents are fictional</span>
+  </div>
+  <div class="pagenum">1 / 4</div>
+  <div class="notes-src">Three AI Product Managers, one HR assistant that shared too much. We work at Northwind People, a fictional tech company in Berlin with about 1,200 employees. We own the AI assistants that HR and employees use every day. One of them, our onboarding assistant, showed a new employee a colleague's salary. In the next 10 minutes we walk you through three steps: what happened, how we reasoned about the cause, and what we recommend. Everything in this case is fictional: the company, the people, the numbers and the documents.</div>
+</section>
+
+<!-- ================= 2 · SET THE SCENE ================= -->
+<section class="slide" data-min="2.5">
+  <div class="kicker"><span>01</span><span class="num">·</span><span>Set the scene</span></div>
+  <h2>A new employee asked about pay and saw a colleague's salary</h2>
+
+  <div class="scene">
+    <div>
+    <div class="vis-label">Normally, the assistant…</div>
+    <ul class="clean">
+      <li><svg class="icon"><use href="#i-people"/></svg><span>Helps <strong>new employees</strong></span></li>
+      <li><svg class="icon"><use href="#i-book"/></svg><span>Answers <strong>HR questions</strong></span></li>
+      <li><svg class="icon"><use href="#i-list"/></svg><span>Shows <strong>their own</strong> to-dos</span></li>
+      <li><svg class="icon"><use href="#i-eye"/></svg><span><strong>Read-only</strong></span></li>
+    </ul>
+    </div>
+
+    <div>
+    <div class="vis-label leak">What happened · 12 Nov</div>
+    <div class="chat small" aria-label="Chat showing the leak">
+      <div class="chat-head"><span class="dot"></span>Onboarding Assistant · 12 Nov</div>
+      <div class="who right">New employee · day 4</div>
+      <div class="bubble user">What is the salary range for my role?</div>
+      <div class="who">Assistant</div>
+      <div class="bubble bot">
+        The range is €52,000–64,000. For reference, <mark>Jordan M. in your team earns €61,500 plus an 8% bonus.</mark>
+        <div><span class="source"><svg class="icon red"><use href="#i-doc"/></svg>Source: HR only</span></div>
+      </div>
+    </div>
+    <div class="caption">In red: a colleague's private pay, from an HR-only document</div>
+    </div>
+  </div>
+  <div class="pagenum">2 / 4</div>
+  <div class="notes-src">A new employee asked about pay and saw a colleague's salary. Normally the assistant helps new employees in their first weeks. It answers HR questions, such as holidays or salary ranges, and shows each person their own to-do list. It can only read information, never change it. On November 12, a new employee, four days into the job, asked for the salary range of their role. The assistant gave the range, and also a colleague's exact salary and bonus. It even named its source: a document only HR should see. Expected was the public salary range only. Why it matters: private pay data reached the wrong person, it may be a data protection breach, which our data protection officer is checking, and trust in HR and the assistant is at risk. What we did first: we blocked all HR-only documents, kept normal HR answers online, and secured the system logs. The screenshot from the employee is our only hard evidence. The AI model and its instructions were updated one week earlier. That is a lead, not proof. So how could this happen?</div>
+</section>
+
+<!-- ================= 3 · OUR THINKING ================= -->
+<section class="slide" data-min="4">
+  <div class="kicker"><span>02</span><span class="num">·</span><span>Our thinking</span></div>
+  <h2>Three checkpoints could have failed, and the logs will show which</h2>
+
+  <div class="flowcap"><span><b>1</b>Facts first</span><span><b>2</b>Follow the question</span><span><b>3</b>Test every checkpoint</span></div>
+  <div class="flow v2" aria-label="Path of a question with three checkpoints A, B, C">
+    <svg viewBox="0 0 1408 150" role="img">
+      <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#6b707b"/></marker></defs>
+      <line x1="238" y1="75" x2="398" y2="75" stroke="#6b707b" stroke-width="2" marker-end="url(#arr)"/>
+      <line x1="638" y1="75" x2="798" y2="75" stroke="#6b707b" stroke-width="2" marker-end="url(#arr)"/>
+      <line x1="1038" y1="75" x2="1168" y2="75" stroke="#ff5c5c" stroke-width="2.5" marker-end="url(#arr)"/>
+      <g font-family="Arial, sans-serif" font-size="22" fill="#f3f3ef" text-anchor="middle">
+        <rect x="8" y="35" width="230" height="80" rx="16" fill="#17191e" stroke="#2c3038"/><text x="123" y="83">New employee</text>
+        <rect x="408" y="35" width="230" height="80" rx="16" fill="#17191e" stroke="#2c3038"/><text x="523" y="83">Assistant</text>
+        <rect x="808" y="35" width="230" height="80" rx="16" fill="#17191e" stroke="#2c3038"/><text x="923" y="83">Documents</text>
+        <rect x="1178" y="35" width="222" height="80" rx="16" fill="rgba(255,92,92,.14)" stroke="#ff5c5c"/><text x="1289" y="83" fill="#ff5c5c" font-weight="600">Leak</text>
+      </g>
+      <g font-family="Arial, sans-serif" font-weight="700" font-size="22" text-anchor="middle">
+        <circle cx="318" cy="75" r="24" fill="#c8f560"/><text x="318" y="83" fill="#11140a">A</text>
+        <circle cx="718" cy="75" r="24" fill="#c8f560"/><text x="718" y="83" fill="#11140a">B</text>
+        <circle cx="923" cy="35" r="24" fill="#c8f560"/><text x="923" y="43" fill="#11140a">C</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="hyps v3">
+    <div class="hyp"><div class="tag">A</div><div class="title">Wrong role</div><div class="plain">Seen as HR employee</div><div class="log"><svg class="icon"><use href="#i-log"/></svg><span><b>Log:</b> user's role</span></div></div>
+    <div class="hyp"><div class="tag">B</div><div class="title">Check skipped</div><div class="plain">Lock not used</div><div class="log"><svg class="icon"><use href="#i-log"/></svg><span><b>Log:</b> did the check run?</span></div></div>
+    <div class="hyp"><div class="tag">C</div><div class="title">Wrong label</div><div class="plain">Document marked “public”</div><div class="log"><svg class="icon"><use href="#i-log"/></svg><span><b>Log:</b> document's source</span></div></div>
+  </div>
+  <div class="caption" style="margin-top:22px">All three equally uncertain · one log entry tells them apart</div>
+
+  <div class="pagenum">3 / 4</div>
+  <div class="notes-src">Three checkpoints could have failed, and the logs will show which. We followed three steps. First, facts first: only the screenshot is certain, everything else is an assumption. Second, we followed the path of the question: from the new employee, through the assistant, to the documents, and back as an answer with the leak. Third, at every checkpoint we asked: could the check have failed here? That gives three explanations. A, wrong role: the system thought the new employee was an HR employee, so the access check worked, but with wrong information. B, check skipped: the access check was not used for HR-only documents; the lock was there but not used. C, wrong label: the salary document was marked public, so it was in the wrong drawer. All three are equally uncertain: we have only one example. Our logs record every request. One log entry shows who the system thought the user was, whether the access check ran, and where the document came from, so it tells A, B and C apart. We also search the logs for other affected users. An AI reviewed our thinking and added two ideas: a reused answer from another user, and privacy protected only by instructions to the AI. We kept both as backups. We deliberately did not blame the recent AI update without evidence. So what do we do now?</div>
+</section>
+
+<!-- ================= 4 · RECOMMENDATION ================= -->
+<section class="slide" data-min="2.5">
+  <div class="kicker"><span>03</span><span class="num">·</span><span>Our recommendation</span></div>
+  <h2>Fix the failed checkpoint, then prove it with “0 Leak Testing”</h2>
+  <div class="verdict">Keep it running <em>safely</em>, find the cause in the logs, make the <em>smallest fix</em>.</div>
+
+  <div class="timeline">
+    <div class="tl"><div class="node"></div><div class="when">Now</div><div class="what">Block HR-only documents</div></div>
+    <div class="tl"><div class="node"></div><div class="when">Within 2 days</div><div class="what">Check A, B, C in the logs</div></div>
+    <div class="tl"><div class="node"></div><div class="when">Then</div><div class="what">Fix only the confirmed cause</div></div>
+    <div class="tl"><div class="node"></div><div class="when">Future</div><div class="what">Leak test before every update</div></div>
+  </div>
+
+  <div class="zero">
+    <h3>0 Leak Testing</h3>
+    <div class="zero-row">
+      <div class="zero-item"><svg class="icon"><use href="#i-check"/></svg><span><strong>21 test questions</strong> → <strong class="accent">0 leaks</strong></span></div>
+      <div class="zero-item"><svg class="icon"><use href="#i-check"/></svg><span>Normal answers still work</span></div>
+      <div class="zero-item"><svg class="icon red"><use href="#i-undo"/></svg><span><strong>1 leak</strong> → block or pause</span></div>
+    </div>
+  </div>
+  <div class="closing">Our lesson: AI privacy failures are usually <strong>permission problems</strong>, not AI problems.</div>
+
+  <div class="pagenum">4 / 4</div>
+  <div class="notes-src">Fix the failed checkpoint, then prove it with zero-leak testing. Our recommendation: keep the assistant running safely, find the real cause in the logs, then make the smallest fix. Now: HR-only documents stay blocked, and the data protection officer reviews the case. Within two days: we analyse the logs, check A, B and C, and search for other leaks. Then: we fix only what the logs confirm: the role, the access check, or the document label. For the future: a leak test before every update, and logs that record every access decision. What we will not do: switch to a smarter AI model. An AI model is not a lock; the system must enforce access rules. How we know it helped, our zero-leak testing: the original question plus 20 test questions about private data must produce zero leaks; new employees still get normal answers, like the public salary range; the logs show no HR-only document in answers to new employees, reviewed weekly for four weeks. If even one leak appears, we block HR data again or pause the assistant. The HR product owner is responsible, together with the data protection officer. Our main lesson: a privacy failure in an AI product is usually a permission or data problem, not an AI problem. Thank you.</div>
+</section>
+
+</div></div>
+
+<div id="progress"></div>
+<div id="hint">← → navigate · F full screen · N notes</div>
+<div id="notes" aria-live="polite">
+  <div class="text" id="notes-text"></div>
+  <div class="meta">
+    <div class="clock" id="clock">0:00</div>
+    <div id="target"></div>
+    <div id="total"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var stage = document.getElementById('stage');
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var progress = document.getElementById('progress');
+  var notes = document.getElementById('notes');
+  var notesText = document.getElementById('notes-text');
+  var clock = document.getElementById('clock');
+  var target = document.getElementById('target');
+  var total = document.getElementById('total');
+  var hint = document.getElementById('hint');
+  var current = 0, slideStart = Date.now(), deckStart = null;
+
+  function fit() {
+    var s = Math.min(window.innerWidth / 1600, window.innerHeight / 900);
+    stage.style.transform = 'scale(' + s + ')';
+  }
+  function fmt(sec) { sec = Math.max(0, Math.floor(sec)); return Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0'); }
+
+  function show(i) {
+    current = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach(function (s, k) { s.classList.toggle('active', k === current); });
+    progress.style.width = ((current + 1) / slides.length * 100) + '%';
+    var src = slides[current].querySelector('.notes-src');
+    notesText.textContent = src ? src.textContent.trim() : '';
+    var mins = parseFloat(slides[current].dataset.min || '0');
+    target.textContent = 'Target: ' + fmt(mins * 60) + ' min';
+    slideStart = Date.now();
+    if (deckStart === null && current > 0) deckStart = Date.now();
+    try { history.replaceState(null, '', '#' + (current + 1)); } catch (e) {}
+  }
+
+  function tick() {
+    var el = (Date.now() - slideStart) / 1000;
+    var mins = parseFloat(slides[current].dataset.min || '0');
+    clock.textContent = fmt(el);
+    clock.classList.toggle('over', mins > 0 && el > mins * 60);
+    total.textContent = 'Total: ' + (deckStart ? fmt((Date.now() - deckStart) / 1000) : '0:00') + ' / 10:00';
+  }
+
+  document.addEventListener('keydown', function (e) {
+    if (['ArrowRight', 'PageDown', ' ', 'Enter'].indexOf(e.key) > -1) { e.preventDefault(); show(current + 1); }
+    else if (['ArrowLeft', 'PageUp', 'Backspace'].indexOf(e.key) > -1) { e.preventDefault(); show(current - 1); }
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length - 1);
+    else if (e.key === 'n' || e.key === 'N') notes.classList.toggle('show');
+    else if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) { document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); }
+      else { document.exitFullscreen && document.exitFullscreen(); }
+    }
+    hint.style.opacity = 0;
+  });
+  document.getElementById('viewport').addEventListener('click', function (e) {
+    show(e.clientX > window.innerWidth / 2 ? current + 1 : current - 1);
+    hint.style.opacity = 0;
+  });
+
+  window.addEventListener('resize', fit);
+  fit();
+  var start = parseInt((location.hash || '#1').slice(1), 10) - 1;
+  show(isNaN(start) ? 0 : start);
+  setInterval(tick, 500);
+  setTimeout(function () { hint.style.opacity = 0; }, 6000);
+})();
+</script>
+</body>
+</html>

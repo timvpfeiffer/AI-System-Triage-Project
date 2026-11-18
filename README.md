@@ -15,7 +15,8 @@ diagnose one failing GenAI system and defend a prioritized recovery plan.
 
 | Deliverable | File | Role |
 |---|---|---|
-| **3-slide presentation** | [work/slides.md](work/slides.md) | **Main deliverable** (created in step S8) |
+| **Presentation (HTML)** | [work/presentation.html](work/presentation.html) | **Main deliverable**: open in a browser, ← → to navigate, N for notes |
+| Slide content (Markdown) | [work/slides.md](work/slides.md) | Text and speaker notes of the presentation |
 | System & trust-boundary map | [work/system-map.md](work/system-map.md) | Feeds slides 1–2 |
 | Diagnostic register | [work/diagnostic-register.md](work/diagnostic-register.md) | Feeds slides 1–2 |
 | Prioritized recovery plan | [work/recovery-plan.md](work/recovery-plan.md) | Feeds slide 3 |

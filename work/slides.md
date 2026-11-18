@@ -1,54 +1,102 @@
-# HR-Onboarding Assistant: Privacy Incident
+# When an HR Assistant Shares Too Much
 
-*All case details are synthetic.*
-
----
-
-## Slide 1 · What Is Broken
-
-**System:** read-only assistant for new hires. It answers HR policy questions and shows their own onboarding tasks.
-
-**What happened (2026-11-12):**
-- New hire asked: *"What is the salary band for my role?"*
-- Answer included **a colleague's actual salary + bonus** and cited an **HR-only** document
-
-**Impact:** High. Personal pay data exposed; possible GDPR breach (the DPO assesses).
-
-**Contained:** the assistant keeps running for policy Q&A; **all HR-only documents are cut off**.
-
-**Unknown:** whether it reproduces, who else was affected, how the document became reachable.
-
-> **Speaker notes:** The new hire reported it with a screenshot the next day. That screenshot is our only evidence. The only known change is a prompt + model update on 2026-11-05. We treat it as a lead, not as the cause.
+*A case study for AI Product Managers · 10 minutes · all names, numbers and documents are invented*
+*HTML version: [presentation.html](presentation.html) (← → navigate · F full screen · N speaker notes + timer)*
 
 ---
 
-## Slide 2 · Why We Think It Is Broken
+## Intro · Who We Are (~1 min)
 
-| # | Hypothesis | Where |
+- **Our company:** Northwind People GmbH, a tech company in Berlin with about 1,200 employees *(fictional)*
+- **Our team:** 3 AI Product Managers who own the AI assistants used by HR and employees
+- **The case:** our onboarding assistant showed a new employee a colleague's salary
+- **Agenda:** 01 Set the scene · 02 Our thinking · 03 Our recommendation
+
+---
+
+## Slide 1 · Set the Scene (~2.5 min)
+
+**What does the system normally do, and what problem did the user run into?**
+
+### What the assistant normally does
+- It helps new employees in their first weeks at the company
+- It answers questions about HR rules, such as holidays or salary ranges
+- It shows each person **their own** onboarding to-do list
+- It can only read information. It cannot change anything.
+
+### What went wrong
+- A new employee, four days into the job, asked:
+  *"What is the salary range for my role?"*
+- The assistant gave the range, **and also a colleague's exact salary and bonus**
+- It even named its source: a document that **only HR should see**
+
+### Why it matters
+- Private pay data reached the wrong person
+- It may be a data protection breach (our data protection officer is checking)
+- Employees may stop trusting the assistant and HR
+
+### What we did first
+- We blocked the assistant from all HR-only documents
+- The assistant stays online for normal HR questions
+- We secured the system logs, which record every question and answer
+
+> **Speaker notes:** The new employee reported this the next day with a screenshot. That screenshot is the only hard evidence we have. We also know that the AI model and its instructions were updated one week earlier. That is a lead, but not proof. Our first step was to stop further harm without switching off the whole service. → *So how could this happen?*
+
+---
+
+## Slide 2 · Our Thinking (~4 min)
+
+**What are the most plausible explanations, and what would we check to narrow them down?**
+
+### How we approached it
+1. **Facts first:** we only treated the screenshot as fact. Everything else is an assumption.
+2. **Follow the path:** we drew the route a question takes, from the user through the system to the answer.
+3. **Find the checkpoints:** at each point where private data could slip through, we asked: *"Could the check have failed here?"*
+
+### Our three most plausible explanations
+
+| | What could have gone wrong | In simple words |
 |---|---|---|
-| 1 | Wrong role: new hire treated as HR, so the filter correctly let it through | Login → role |
-| 2 | Permission filter not applied to HR-only documents | Retrieval |
-| 3 | Document labelled/stored as public | Ingestion |
+| **A** | The system thought the new employee **was an HR employee** | The access check worked, but with wrong information about the person |
+| **B** | The access check **was skipped** for HR-only documents | The lock was there but not used |
+| **C** | The salary document **was stored as "public"** | The document was in the wrong drawer |
 
-All **Low confidence**. Also considered: answer cache, prompt-only control.
+All three are **equally uncertain**: we have only one example.
 
-**Next check:** the trace of the failing request (role · source index · filter). **One record separates all three.**
+### What we check in our logs
+The system logs every request. The log entry for this exact question should show:
+- who the system **thought the user was** → A
+- whether the **access check ran** → B
+- **where** the document came from → C
 
-> **Speaker notes:** The ranking is our team judgment; no evidence favours one yet. The architecture (role filter, separate indexes) is assumed, not known. An AI review panel added the cache and prompt-only ideas; we kept them as alternatives the same trace will check.
+**One log entry tells all three apart.**
+We also search the logs for **other answers** that used HR-only documents, to find out whether anyone else was affected.
+
+> **Speaker notes:** We also asked an AI to review our thinking critically. It suggested two more ideas: the assistant reused an answer given to someone else, or privacy was protected only by written instructions to the AI. We kept both as backups, and the same log entry would show them too. We deliberately did not blame the recent AI update without evidence. → *So what do we do now?*
 
 ---
 
-## Slide 3 · What We Recommend
+## Slide 3 · Our Recommendation (~2.5 min)
 
-**Decision: Contain + Investigate.** No model change.
+**What would we do next, and how would we know it helped?**
 
-1. **Contain:** cut HR-only documents; DPO assesses
-2. **Investigate (48 h):** trace + check role, filter, document label
-3. **Correct:** fix only the confirmed boundary
-4. **Prevent:** zero-leak test set in every release; log role, index and filter
+### Our recommendation
+**Keep the assistant running safely, find the real cause, then make the smallest fix.**
 
-**Proof:** Sam's question + 20 restricted-data probes → **0 leaks**; public band still answered.
-**Owner:** HR product owner (+ DPO). **Rollback:** any leak → cut HR data again or pause.
-**Would change our mind:** a leak with HR-only documents disconnected → pause the assistant.
+### Next steps
+1. **Now:** keep HR-only documents blocked; the data protection officer reviews the case
+2. **Within 2 days:** analyse the logs: check A, B and C for this request, and search for other leaks
+3. **Then:** fix only what the evidence shows (the user's role, the access check, or the document's label)
+4. **For the future:** test for data leaks before every update; make sure the logs record every access decision
 
-> **Speaker notes:** We rejected "switch to a stronger model": a model can't enforce permissions. The fix is a permission or data fix, not an AI fix.
+### What we will *not* do
+**Switch to a "smarter" AI model.** An AI model is not a lock. Access rules must be enforced by the system, not by instructions to the AI.
+
+### How we will know it helped
+- We ask the original question again, plus **20 test questions about private data**, and see **zero leaks**
+- New employees still get normal answers, such as the public salary range
+- The logs show no HR-only document in any answer to a new employee
+- The HR product owner is responsible; the data protection officer reviews the logs weekly for 4 weeks
+- **If a single leak appears again:** block HR data again, or pause the assistant
+
+> **Speaker notes:** Our main lesson as product managers: a privacy failure in an AI product is usually a permission or data problem, not an AI problem. The fix belongs in access rules and testing, not in a bigger model. What would change our mind: if data still leaks while HR documents are blocked, the cause lies elsewhere and we would pause the assistant.
